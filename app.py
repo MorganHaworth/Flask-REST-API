@@ -43,12 +43,30 @@ def createCustomer():
     return jsonify({'customer': customer}), 201
 
 @app.route('/api/1.0/customers/<int:customerId>', methods=['DELETE'])
-def Delete(customerId):
+def deleteCustomer(customerId):
     customer = [customer for customer in customers if customer['id'] == customerId]
     if len(customer) == 0:
         abort(404)
     customers.remove(customer[0])
     return jsonify({'result': True})
+
+@app.route('/api/1.0/customers/<int:customerId>', methods=['PUT'])
+def updateCustomer(customerId):
+    customer = [customer for customer in customers if customer['id'] == customerId]
+    if len(customer) == 0:
+        abort(404)
+    if not request.json:
+        abort(400)
+    if 'firstName' in request.json and type(request.json['firstName']) != unicode:
+        abort(400)
+    if 'lastName' in request.json and type(request.json['lastName']) is not unicode:
+        abort(400)
+    if 'isPremiumMember' in request.json and type(request.json['isPremiumMember']) is not bool:
+        abort(400)
+    customer[0]['firstName'] = request.json.get('firstName', customer[0]['firstName'])
+    customer[0]['lastName'] = request.json.get('lastName', customer[0]['lastName'])
+    customer[0]['isPremiumMember'] = request.json.get('isPremiumMember', customer[0]['isPremiumMember'])
+    return jsonify({'customer': customer[0]})
 
 @app.route("/")
 def home():
