@@ -57,9 +57,9 @@ def updateCustomer(customerId):
         abort(404)
     if not request.json:
         abort(400)
-    if 'firstName' in request.json and type(request.json['firstName']) != unicode:
+    if 'firstName' in request.json and type(request.json['firstName']) != str:
         abort(400)
-    if 'lastName' in request.json and type(request.json['lastName']) is not unicode:
+    if 'lastName' in request.json and type(request.json['lastName']) is not str:
         abort(400)
     if 'isPremiumMember' in request.json and type(request.json['isPremiumMember']) is not bool:
         abort(400)
